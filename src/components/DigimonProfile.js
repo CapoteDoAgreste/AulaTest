@@ -8,21 +8,23 @@ function DigimonProfile() {
 
   function increase() {
     var btn = document.getElementById("rightButton");
-    if (!btn.disable) {
+    console.log("right");
+    if (!btn.disabled) {
       ID += 1;
       setDigimonID(digimonID + 1);
       refreshDigimon(btn);
-      btn.disable = true;
+      btn.disabled = true;
     }
   }
 
   function decrease() {
     var btn = document.getElementById("leftButton");
-    if (!btn.disable) {
+    console.log("left");
+    if (!btn.disabled) {
       ID -= 1;
+      btn.disabled = true;
       setDigimonID(digimonID - 1);
       refreshDigimon(btn);
-      btn.disable = true;
     }
   }
 
@@ -30,24 +32,30 @@ function DigimonProfile() {
     fetch("https://www.digi-api.com/api/v1/digimon/" + ID)
       .then((response) => response.json())
       .then((data) => {
-        digimon.name = data.name;
-        digimon.image = data.images[0].href;
-        digimon.description = data.descriptions[0].description;
+        const updatedDigimon = {
+          name: data.name,
+          image: data.images[0].href,
+          description:
+            data.descriptions[0]?.description || "without description",
+        };
         data.descriptions.forEach((element) => {
-          if (element.language == "en_us") {
-            digimon.description = element.description;
+          if (element.language === "en_us") {
+            updatedDigimon.description = element.description;
           }
-          if (element.description == undefined) {
-            digimon.description = "without description";
-          }
-          button.disable = false;
         });
+        setDigimonID(digimonID);
+        digimon = updatedDigimon;
+        console.log(digimon);
+        button.disabled = false;
       })
-      .catch((error) => (button.disable = false));
+      .catch((error) => {
+        console.error(error);
+        button.disabled = false;
+      });
   }
 
   return (
-    <div class="mb3 digimonProfile rounded-4" onLoad={refreshDigimon}>
+    <div class="mb3 digimonProfile rounded-4">
       <div></div>
       <div class="digiItem" id="imageTitle">
         <img src={digimon.image} class="rounded-4" id="image" />
@@ -80,4 +88,5 @@ function DigimonProfile() {
     </div>
   );
 }
+
 export default DigimonProfile;
