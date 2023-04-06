@@ -28,11 +28,6 @@ code {
   width: 150px;
 }
 
-img {
-  margin-top: 64px;
-  
-}
-
 #digimonName{
   display: block;
   position: absolute;
@@ -57,13 +52,88 @@ img {
   text-align: justify;
 }
 
-
-button{
-  margin-left: 10px;
-  margin-top: 128px;
+.digiCards{
+  display: grid;
+  text-align: center;
+  padding: 1vw;
 }
 
-#image{
-  height: 200px;
-  width: 200px;
+.w-30{
+  width: 35vw;
+}
+
+.card {
+  display: inline-block;
+  width: 20vw;
+  height: 20vw;
+  margin: 1vw auto;
+  margin-left: 1vw;
+}
+
+#cardGroup{
+  display: flex;
+  align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
+  flex-wrap: nowrap;
+}
+
+.card-img-center{
+  height: 10vw;
+  width: 10vw;
+  align-self: center;
+}
+
+.card-title{
+  font-size: 1.2vw;
+}
+
+.cardBody{
+  height: 100%;
+}
+
+.digimonBtn{
+  position: absolute;
+  width: 8vw;
+  height: 2vw;
+  bottom:1vw;
+  right: 3.75vw;
+  font-size: 0.8vw;
+}
+
+.rightBtn{
+  position: absolute;
+  right: 2vw;
+}
+
+.leftBtn{
+  position: absolute;
+  left: 2vw;
+}
+
+.searchdiv{
+  position: absolute;
+  right: 1vw;
+}
+
+.searchedName{
+  font-size: 1.2vw;
+}
+
+.searchedImage{
+  height: 10vw;
+  width: 10vw;
+}
+
+.searchedCard{
+  display: inline-flex;
+  align-items: center;
+  padding: 3vw;
+  text-align: center;
+  width: 20vw;
+  height: 20vw;
+}
+
+#searchCardGroup{
+  text-align: center;
 }

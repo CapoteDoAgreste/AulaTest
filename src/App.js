@@ -1,5 +1,5 @@
 import "./App.css";
-import Profile from "./components/DigimonProfile";
+import Profile from "./components/rowPage";
 import { useState } from "react";
 
 function App() {
