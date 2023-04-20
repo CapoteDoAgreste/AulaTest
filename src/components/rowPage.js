@@ -14,7 +14,7 @@ var pageRow = null;
 var searching = false;
 var pageOnScreen = true;
 
-function RowPage() {
+function RowPageRow() {
   const [refresh, refreshDigimon] = useState(0);
 
   async function getDescription(name) {
@@ -134,9 +134,6 @@ function RowPage() {
         const searchResult = initSearch(value);
       }
     }
-    if (pageRow == null) {
-      pageRow = document.getElementById("cardGroup").cloneNode(true);
-    }
 
     const nBody = document.getElementById("newBody");
     if (value !== "") {
@@ -146,12 +143,13 @@ function RowPage() {
     }
 
     if (value == "" && !pageOnScreen) {
-      nBody.appendChild(pageRow);
-      pageOnScreen = true;
+      document.getElementById("cardGroup").style.visibility = "";
+      document.getElementById("cardGroup").style.position = "";
     }
     if (searching && value !== "" && pageOnScreen) {
       pageOnScreen = false;
-      document.getElementById("cardGroup").remove();
+      document.getElementById("cardGroup").style.visibility = "hidden";
+      document.getElementById("cardGroup").style.position = "absolute";
       const searchResult = initSearch(value);
       console.log(searchResult);
     }
@@ -208,6 +206,13 @@ function RowPage() {
       </nav>
 
       <div id="cardGroup">
+        <button
+          type="button"
+          class="btn btn-primary pageBtn"
+          onClick={previousPage}
+        >
+          Antes
+        </button>
         <div class="card digiCards">
           <img
             class="card-img-center"
@@ -280,26 +285,17 @@ function RowPage() {
             </div>
           </div>
         </div>
-        <div>
-          <button
-            type="button"
-            class="btn btn-primary leftBtn"
-            onClick={previousPage}
-          >
-            Antes
-          </button>
 
-          <button
-            type="button"
-            class="btn btn-primary rightBtn"
-            onClick={nextPage}
-          >
-            Depois
-          </button>
-        </div>
+        <button
+          type="button"
+          class="btn btn-primary pageBtn"
+          onClick={nextPage}
+        >
+          Depois
+        </button>
       </div>
     </div>
   );
 }
 
-export default RowPage;
+export default RowPageRow;
