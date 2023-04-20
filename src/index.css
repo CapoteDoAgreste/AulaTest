@@ -33,6 +33,7 @@ code {
   position: absolute;
   text-align: center;
   width: 200px;
+  margin-left: 3vw;
 }
 
 .digiItem{
@@ -43,12 +44,10 @@ code {
 
 #description{
   margin: 0;
-  position: absolute;
-  top: 30%;
   -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  margin-left: 128px;
-  width: 640px;
+  transform: translateY(50%);
+  margin-left: 13vw;
+  width: 38vw;
   text-align: justify;
 }
 
@@ -130,4 +129,17 @@ code {
 
 #searchCardGroup{
   text-align: center;
+}
+
+#profileImage{
+  height: 20vw;
+  margin-top: 3vw;
+}
+
+#profileNameImage{
+  text-align: center;
+}
+
+p{
+  width: 32px;
 }

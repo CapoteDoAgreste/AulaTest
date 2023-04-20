@@ -44,6 +44,7 @@ function DigimonProfile() {
   }
 
   function decrease() {
+    console.log(digimon);
     var btn = document.getElementById("leftButton");
     console.log("left");
     if (!btn.disabled) {
@@ -110,45 +111,64 @@ function DigimonProfile() {
   }
 
   return (
-    <div class="mb3 digimonProfile rounded-4">
-      <div>
-        <select
-          class="form-control rounded-4"
-          id="digiSelector"
-          onChange={filterDigimon}
-        >
-          <option selected value="none">
-            Select Stage
-          </option>
-        </select>
-      </div>
-      <div class="digiItem" id="imageTitle">
-        <img src={digimon.image} class="rounded-4" id="image" />
-        <h2>
-          <span id="digimonName">{digimon.name}</span>
-        </h2>
-
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand p-3" href="#">
+          Digimon Profile
+        </a>
         <button
-          type="button"
-          class="btn btn-light"
-          id="leftButton"
-          onClick={decrease}
+          class="navbar-toggler"
+          typea-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          Left
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-light"
-          onClick={increase}
-          id="rightButton"
-        >
-          Right
-        </button>
-      </div>
-      <div class="digiItem" id="description">
-        <h6>
-          <span id="digimonDescription">{digimon.description}</span>
-        </h6>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item mt-4">
+              <h5>Level:</h5>
+            </li>
+            <li class="nav-item dropdown p-3">
+              <select class="form-control">
+                <option>None</option>
+                <option>Baby I-</option>
+                <option>Baby II</option>
+                <option>Child</option>
+                <option>Adult</option>
+                <option>Ultimate</option>
+                <option>Perfect</option>
+                <option>Armor</option>
+                <option>Hybrid</option>
+                <option>Unknown</option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="mb3 digimonProfile rounded-4">
+        <div>
+          <select
+            class="form-control rounded-4"
+            id="digiSelector"
+            onChange={filterDigimon}
+          >
+            <option selected value="none">
+              Select Stage
+            </option>
+          </select>
+        </div>
+        <div class="digiItem" id="imageTitle">
+          <img src={digimon.image} class="rounded-4" id="image" />
+          <h2>
+            <span id="digimonNameProfile">{digimon.name}</span>
+          </h2>
+        </div>
+        <div class="digiItem" id="description">
+          <h6>
+            <span id="digimonDescription">{digimon.description}</span>
+          </h6>
+        </div>
       </div>
     </div>
   );

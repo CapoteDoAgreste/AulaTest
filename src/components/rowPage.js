@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import DigimonProfile from "./DigimonProfile.js";
 import { Digimon } from "./Digimon.js";
-import React, { useEffect } from "react";
+import React, { Component, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import { useState } from "react";
 
 var digimon01 = new Digimon();
@@ -14,7 +16,11 @@ var pageRow = null;
 var searching = false;
 var pageOnScreen = true;
 
+var rowDigimon = <RowPageRow />;
+
 function RowPageRow() {
+  const leftButton = useRef(null);
+  const rightButton = useRef(null);
   const [refresh, refreshDigimon] = useState(0);
 
   async function getDescription(name) {
@@ -68,6 +74,8 @@ function RowPageRow() {
     }
 
     refreshDigimon(refresh + 1);
+    leftButton.current.disabled = false;
+    rightButton.current.disabled = false;
   }
 
   useEffect(() => {
@@ -75,11 +83,17 @@ function RowPageRow() {
   }, []);
 
   function previousPage() {
+    leftButton.current.disabled = true;
+    rightButton.current.disabled = true;
+
     page -= 1;
     initDigimon();
   }
 
   function nextPage() {
+    leftButton.current.disabled = true;
+    rightButton.current.disabled = true;
+
     page += 1;
     initDigimon();
   }
@@ -120,11 +134,50 @@ function RowPageRow() {
           newDiv.appendChild(newName);
           newDivButton.appendChild(newButton);
           newDiv.appendChild(newDivButton);
+          var digiName = element.name;
+          newDiv.onclick = () => {
+            makeDigimon(digiName, nBody);
+          };
         });
       });
   }
 
+  async function makeDigimon(name, body) {
+    fetch(`https://www.digi-api.com/api/v1/digimon/${name}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const pDigimon = {
+          name: data.name,
+          image: data.images[0].href,
+          description: data.descriptions[0].description,
+        };
+        const profile = React.createElement(loadProfile, {
+          nDigimon: pDigimon,
+        });
+        ReactDOM.render(profile, body);
+      });
+  }
+
+  function loadProfile(props) {
+    searching = true;
+    pageOnScreen = true;
+    return (
+      <div className="profile">
+        <Profile nDigimon={props.nDigimon} />
+      </div>
+    );
+  }
+  function searchkey(event) {
+    if (event) {
+      if (event.key == "Enter") {
+        search();
+      }
+    }
+  }
+
   function search() {
+    const nBody = document.getElementById("newBody");
+
     var value = document.getElementById("searchbar").value;
     const searchCards = document.getElementById("searchCardGroup");
     if (searchCards != null) {
@@ -135,7 +188,6 @@ function RowPageRow() {
       }
     }
 
-    const nBody = document.getElementById("newBody");
     if (value !== "") {
       searching = true;
     } else {
@@ -143,16 +195,102 @@ function RowPageRow() {
     }
 
     if (value == "" && !pageOnScreen) {
-      document.getElementById("cardGroup").style.visibility = "";
-      document.getElementById("cardGroup").style.position = "";
+      console.log("test");
     }
     if (searching && value !== "" && pageOnScreen) {
       pageOnScreen = false;
-      document.getElementById("cardGroup").style.visibility = "hidden";
-      document.getElementById("cardGroup").style.position = "absolute";
+      if (document.getElementById("cardGroup") != null) {
+        document.getElementById("cardGroup").style.visibility = "hidden";
+        document.getElementById("cardGroup").style.position = "absolute";
+      } else {
+        document.getElementsByClassName("digimonProfile")[0].style.visibility =
+          "hidden";
+        document.getElementsByClassName("digimonProfile")[0].style.position =
+          "absolute";
+      }
       const searchResult = initSearch(value);
       console.log(searchResult);
     }
+  }
+
+  function Profile(props) {
+    return (
+      /*<div className="card">
+        <h2>{props.nDigimon.name}</h2>
+        <img src={props.nDigimon.image} alt={props.nDigimon.name} />
+        <p>{props.nDigimon.description}</p>
+      </div>*/
+      <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand p-3" href="./public/">
+            Digimon Profile
+          </a>
+          <button
+            class="navbar-toggler"
+            typea-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item mt-4">
+                <h5>Level:</h5>
+              </li>
+              <li class="nav-item dropdown p-3">
+                <select class="form-control">
+                  <option>None</option>
+                  <option>Baby I-</option>
+                  <option>Baby II</option>
+                  <option>Child</option>
+                  <option>Adult</option>
+                  <option>Ultimate</option>
+                  <option>Perfect</option>
+                  <option>Armor</option>
+                  <option>Hybrid</option>
+                  <option>Unknown</option>
+                </select>
+              </li>
+            </ul>
+            <div class="input-group input-group-sm p-3 w-30 searchdiv">
+              <input
+                class="form-control input-group-prepend"
+                id="searchbar"
+                onKeyUp={searchkey}
+              ></input>
+              <button
+                type="button"
+                class="btn btn-outline-primary input-group-prepend"
+                onClick={() => {
+                  search();
+                }}
+                ref={leftButton}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        </nav>
+        <div class="mb3 digimonProfile rounded-4">
+          <div class="digiItem profileNameImage" id="imageTitle">
+            <img
+              src={props.nDigimon.image}
+              class="rounded-4"
+              id="profileImage"
+            />
+            <h2>
+              <span id="digimonName">{props.nDigimon.name}</span>
+            </h2>
+          </div>
+          <div class="digiItem" id="description">
+            <h6>
+              <span id="digimonDescription">{props.nDigimon.description}</span>
+            </h6>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -193,11 +331,13 @@ function RowPageRow() {
             <input
               class="form-control input-group-prepend"
               id="searchbar"
+              onKeyUp={searchkey}
             ></input>
             <button
               type="button"
               class="btn btn-outline-primary input-group-prepend"
               onClick={search}
+              ref={leftButton}
             >
               Search
             </button>
@@ -290,6 +430,7 @@ function RowPageRow() {
           type="button"
           class="btn btn-primary pageBtn"
           onClick={nextPage}
+          ref={rightButton}
         >
           Depois
         </button>
